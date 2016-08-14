@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/KyleFrisbie/kylefrisbie.com-node_server#readme",
   "devDependencies": {
-    "eslint": "^3.3.0"
+    "eslint": "^3.3.0",
+    "mocha": "^3.0.2"
   }
 }
