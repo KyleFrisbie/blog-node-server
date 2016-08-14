@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/KyleFrisbie/kylefrisbie.com-node_server/issues"
   },
-  "homepage": "https://github.com/KyleFrisbie/kylefrisbie.com-node_server#readme"
+  "homepage": "https://github.com/KyleFrisbie/kylefrisbie.com-node_server#readme",
+  "devDependencies": {
+    "eslint": "^3.3.0"
+  }
 }
