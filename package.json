@@ -4,7 +4,8 @@
   "description": "Server written in node.js for kylefrisbie.com personal blog site",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon ./server/index.js",
+    "test": "mocha ./tests/*"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,16 @@
   },
   "homepage": "https://github.com/KyleFrisbie/kylefrisbie.com-node_server#readme",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
     "eslint": "^3.3.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "nodemon": "^1.10.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "mongoose": "^4.5.9",
+    "morgan": "^1.7.0"
   }
 }
