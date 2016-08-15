@@ -6,14 +6,14 @@ var server = require('../server/index');
 var should = chai.should();
 chai.use(chaiHttp);
 
-describe('Server-Test', function () {
-  it('should make a request at the root of the application "/"', function () {
+describe('BlogPost-Test', function () {
+  it('should get all blog posts from /api/blogposts GET', function () {
     chai.request(server)
-      .get('/')
+      .get('/api/blogposts')
       .end(function (err, res) {
         res.should.have.status(200);
-        res.body.should.be.json;
+        res.should.be.json;
         done();
       });
-  });
+  })
 });
