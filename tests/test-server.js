@@ -16,4 +16,14 @@ describe('Server-Test', function () {
         done();
       });
   });
+  it('should fail to post something to the root of the application "/" POST', function () {
+    chai.request(server)
+      .post('/')
+      .send({
+        'post': 'item'
+      })
+      .end(function (err, res) {
+        res.should.not.have.status(200);
+      });
+  });
 });
