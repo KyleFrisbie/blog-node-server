@@ -1,6 +1,6 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-
+process.env.NODE_ENV = 'test';
 var server = require('../server/index');
 
 var should = chai.should();
@@ -12,7 +12,6 @@ describe('Server-Test', function () {
       .get('/')
       .end(function (err, res) {
         res.should.have.status(200);
-        res.body.should.be.json;
         done();
       });
   });

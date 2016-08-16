@@ -2,9 +2,14 @@ const express = require('express');
 const http = require('http');
 const bodyparser = require('body-parser');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 
 const app = express();
 const router = require('./router');
+const config = require('./config');
+
+// db setup
+mongoose.connect(config.mongoURI['development']);
 
 // app setup
 app.use(morgan('combined'));
