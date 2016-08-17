@@ -22,6 +22,7 @@ describe('Server-Test', function () {
       })
       .end(function (err, res) {
         res.should.not.have.status(200);
+        done();
       });
   });
 });

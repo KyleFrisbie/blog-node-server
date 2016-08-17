@@ -1,15 +1,17 @@
 const Blogpost = require('../../models/blogpost_model');
 
-exports.getAllBlogposts = function (req, res, next) {
-  const blogposts = Blogpost.find(function(err, blogposts) {
+const BlogpostAPI = {};
+
+BlogpostAPI.getAllBlogposts = function (req, res, next) {
+  Blogpost.find(function(err, blogposts) {
     if (err) {
       return next(err);
     }
-    return res.json({'blogposts': blogpost});
-  })
+    return res.json({'blogposts': blogposts});
+  });
 };
 
-exports.insertBlogpost = function (req, res, next) {
+BlogpostAPI.insertBlogpost = function (req, res, next) {
   console.log('req.body: ', req.body);
   const blogpost = new Blogpost({
     'title': req.body.title,
@@ -22,3 +24,5 @@ exports.insertBlogpost = function (req, res, next) {
     res.send({'blogpost': blogpost});
   });
 };
+
+module.exports = BlogpostAPI;

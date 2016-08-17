@@ -11,7 +11,7 @@ const env = process.env.NODE_ENV || 'development';
 const config = require('./config/config.' + env);
 
 // db setup
-mongoose.createConnection(config.mongo.uri, config.mongo.db);
+mongoose.connect('mongodb://' + config.mongo.uri + '/' + config.mongo.db);
 
 // app setup
 app.use(morgan('combined'));

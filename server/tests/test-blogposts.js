@@ -5,29 +5,30 @@ const server = require('../index');
 const Blogpost = require('../models/blogpost_model');
 
 var should = chai.should();
+var assert = chai.assert;
 chai.use(chaiHttp);
 
 describe('BlogPost-Test', function () {
   Blogpost.collection.drop();
 
-  beforeEach(function (done) {
-    new Blogpost({
-      'title': faker.lorem.sentence(),
-      'subtitle': faker.lorem.sentence(),
-      'createdOn': Date(faker.date.past()),
-      'postBody': faker.lorem.paragraphs()
-    }).save(function (err) {
-      done();
-    });
-  });
-
-  afterEach(function (done) {
-    Blogpost.collection.drop();
-    done();
-  });
-
   it('should generate dummy blog post data to work with', function (done) {
-
+    for (var i = 0; i < 50; i++) {
+      var blogpost = new Blogpost({
+        'title': faker.lorem.sentence(),
+        'subtitle': faker.lorem.sentence(),
+        'createdOn': Date(faker.date.past()),
+        'postBody': faker.lorem.paragraphs()
+      });
+      blogpost.save(function (err, blogpost) {
+        if (err) done(err);
+      });
+    }
+    done();
+    //Blogpost.count({}, function (err, count) {
+    //  console.log('count is:', couint);
+    //  assert.equal(50, count);
+    //  done();
+    //});
   });
 
   it('should get all blog posts from /api/blogposts GET', function (done) {
@@ -39,13 +40,13 @@ describe('BlogPost-Test', function () {
         done();
       });
   });
-  it('should post a single blog post to /api/add-blogpost', function (done) {
+  it('should post a single blog post to /api/insert-blogpost', function (done) {
     chai.request(server)
-      .post('/api/blogposts/add-blogpost')
+      .post('/api/blogposts/insert-blogpost')
       .send({
         'title': faker.random.words(),
         'subtitle': faker.random.words(),
-        'createdOn': faker.date,
+        'createdOn': Date(faker.date.past()),
         'postBody': faker.random.words()
       })
       .end(function (err, res) {
