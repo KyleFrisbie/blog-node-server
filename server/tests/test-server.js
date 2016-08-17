@@ -1,13 +1,12 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-process.env.NODE_ENV = 'test';
 var server = require('../index');
 
 var should = chai.should();
 chai.use(chaiHttp);
 
 describe('Server-Test', function () {
-  it('should make a request at the root of the application "/"', function () {
+  it('should make a request at the root of the application "/"', function (done) {
     chai.request(server)
       .get('/')
       .end(function (err, res) {
@@ -15,7 +14,7 @@ describe('Server-Test', function () {
         done();
       });
   });
-  it('should fail to post something to the root of the application "/" POST', function () {
+  it('should fail to post something to the root of the application "/" POST', function (done) {
     chai.request(server)
       .post('/')
       .send({
