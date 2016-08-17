@@ -1,7 +1,8 @@
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 process.env.NODE_ENV = 'test';
-var server = require('../server/index');
+var server = require('../index');
+console.log(process.env.NODE_ENV);
 
 var should = chai.should();
 chai.use(chaiHttp);

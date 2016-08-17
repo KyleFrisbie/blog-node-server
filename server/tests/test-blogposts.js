@@ -1,9 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
-const server = require('../server/index');
-const Blogpost = require('../server/models/blogpost_model');
-process.env.NODE_ENV = 'test';
+const server = require('../index');
+const Blogpost = require('../models/blogpost_model');
 
 var should = chai.should();
 chai.use(chaiHttp);

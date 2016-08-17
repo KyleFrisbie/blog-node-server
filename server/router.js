@@ -1,4 +1,4 @@
-const BlogpostsAPI = require('./controllers/api/blogposts-api');
+const BlogpostsAPI = require('./controllers/api/blogposts_api_controller');
 
 module.exports = function (app) {
   app.get('/', function (req, res) {
