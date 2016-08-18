@@ -5,7 +5,6 @@ const server = require('../index');
 const Blogpost = require('../models/blogpost_model');
 
 var should = chai.should();
-var assert = chai.assert;
 chai.use(chaiHttp);
 
 function fakeBlogpost() {
@@ -15,6 +14,7 @@ function fakeBlogpost() {
       'subtitle': faker.lorem.sentence(),
       'author': faker.fake("{{name.firstName}} {{name.lastName}}"),
       'imageURL': faker.image.imageUrl(),
+      'tags': [{'tag': faker.lorem.word}, {'tag': faker.lorem.word}, {'tag': faker.lorem.word}],
       'createdOn': Date(faker.date.past()),
       'postBody': faker.lorem.paragraphs()
     }));
@@ -42,6 +42,7 @@ describe('BlogPost-Test', function () {
         done();
       });
   });
+
   it('should post a single blog post to /api/insert-blogpost', function (done) {
     var blogpost = fakeBlogpost();
     chai.request(server)
@@ -56,17 +57,20 @@ describe('BlogPost-Test', function () {
         res.body.success.should.equal(true);
         res.body.blogpost.should.be.a('object');
         res.body.blogpost.should.have.property('title');
+        res.body.blogpost.title.should.equal(blogpost.title);
         res.body.blogpost.should.have.property('subtitle');
         res.body.blogpost.should.have.property('author');
         res.body.blogpost.should.have.property('imageURL');
         res.body.blogpost.should.have.property('createdOn');
+        res.body.blogpost.should.have.property('tags');
         res.body.blogpost.should.have.property('postBody');
-        res.body.blogpost.title.should.equal(blogpost.title);
         res.body.blogpost.subtitle.should.equal(blogpost.subtitle);
         res.body.blogpost.author.should.equal(blogpost.author);
         // TODO: figure out how to implicitly convert blogpost date
         //res.body.blogpost.createdOn.should.equal(blogpost.createdOn);
         res.body.blogpost.imageURL.should.equal(blogpost.imageURL);
+        res.body.blogpost.tags.should.be.a('Array')
+          .and.have.lengthOf(3);
         res.body.blogpost.postBody.should.equal(blogpost.postBody);
         done();
       });

@@ -12,13 +12,13 @@ BlogpostAPI.getAllBlogposts = function (req, res, next) {
 };
 
 BlogpostAPI.insertBlogpost = function (req, res, next) {
-  console.log('req.body: ', req.body);
   const blogpost = new Blogpost({
     'title': req.body.title,
     'subtitle': req.body.subtitle,
     'createdOn': req.body.createdOn,
     'author': req.body.author,
     'imageURL': req.body.imageURL,
+    'tags': req.body.tags,
     'postBody': req.body.postBody
   });
   blogpost.save(function (err) {
@@ -35,5 +35,9 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
     });
   });
 };
+
+BlogpostAPI.addTag = function(req, res, next) {
+  Blogpost.findOne({})
+}
 
 module.exports = BlogpostAPI;
