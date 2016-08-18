@@ -17,11 +17,22 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
     'title': req.body.title,
     'subtitle': req.body.subtitle,
     'createdOn': req.body.createdOn,
+    'author': req.body.author,
+    'imageURL': req.body.imageURL,
     'postBody': req.body.postBody
   });
   blogpost.save(function (err) {
-    if (err) return next(err);
-    res.send({'blogpost': blogpost});
+    if (err) {
+      res.send({
+        'success': false,
+        'blogpost': blogpost
+      });
+      return next(err);
+    }
+    res.send({
+      'success': true,
+      'blogpost': blogpost
+    });
   });
 };
 

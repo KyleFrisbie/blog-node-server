@@ -5,6 +5,8 @@ const blogpostSchema = new Schema({
   title: String,
   subtitle: String,
   createdOn: Date,
+  author: String,
+  imageURL: String,
   postBody: String
 });
 
