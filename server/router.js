@@ -8,4 +8,5 @@ module.exports = function (app) {
   // blog post api
   app.get('/api/blogposts', BlogpostsAPI.getAllBlogposts);
   app.post('/api/blogposts/insert-blogpost', BlogpostsAPI.insertBlogpost);
+  app.post('/api/blogposts/:blogpostId/add-tag', BlogpostsAPI.addTag);
 };

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const tags = {};
 
 tags.tagSchema = new Schema({
-  tag: String
+  name: String
 });
 
 tags.TagModel = mongoose.model('tags', tags.tagSchema);

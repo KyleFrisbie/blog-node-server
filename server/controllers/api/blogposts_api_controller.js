@@ -1,4 +1,5 @@
 const Blogpost = require('../../models/blogpost_model');
+const Tag = require('../../models/tag_model').TagModel;
 
 const BlogpostAPI = {};
 
@@ -37,7 +38,35 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
 };
 
 BlogpostAPI.addTag = function(req, res, next) {
-  Blogpost.findOne({})
-}
+  console.log('PATH:');
+  Tag.findOne({'tag': req.body.name}, function (err, tag) {
+    if(err) {
+      var tag = new Tag({
+        'name': req.body.name
+      });
+      tag.save(function (err) {
+        if(err) {
+          return next(err);
+        }
+      });
+    }
+    Blogpost.findById(req.params.blogpostId, function (err, blogpost) {
+    if (err) {
+      res.send({
+        'success': false,
+        'blogpost': blogpost,
+        'tag': tag
+      });
+      return next(err);
+    }
+    console.log('tag:', tag);
+    blogpost.tags.push(tag);
+    res.send({
+      'success': true,
+      'blogpost': blogpost
+    });
+    })
+  });
+};
 
 module.exports = BlogpostAPI;

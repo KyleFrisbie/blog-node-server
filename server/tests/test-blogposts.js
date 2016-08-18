@@ -3,6 +3,7 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const server = require('../index');
 const Blogpost = require('../models/blogpost_model');
+const Tag = require('../models/tag_model').TagModel;
 
 var should = chai.should();
 chai.use(chaiHttp);
@@ -26,9 +27,9 @@ describe('BlogPost-Test', function () {
   it('should generate dummy blog post data to work with', function (done) {
     for (var i = 0; i < 50; i++) {
       var blogpost = fakeBlogpost();
-        blogpost.save(function (err, blogpost) {
-          if (err) done(err);
-        });
+      blogpost.save(function (err, blogpost) {
+        if (err) done(err);
+      });
     }
     done();
   });
@@ -72,7 +73,37 @@ describe('BlogPost-Test', function () {
         res.body.blogpost.tags.should.be.a('Array')
           .and.have.lengthOf(3);
         res.body.blogpost.postBody.should.equal(blogpost.postBody);
-        done();
+        // add a tag to blog post
+        var tag = new Tag({
+          'name': faker.lorem.word()
+        });
+        console.log('PATH: /api/blogposts/' + blogpost._id + '/add-tag');
+        chai.request(server)
+          .post('/api/blogposts/' + blogpost._id + '/addTag')
+          .send(tag)
+          .end(function (err, res) {
+            res.should.have.status(200);
+            res.should.be.json;
+            res.body.should.be.a('object');
+            res.body.should.have.property('success');
+            res.body.should.have.property('blogpost');
+            res.body.success.should.equal(true);
+            done();
+          });
       });
   });
+
+  it('should add tags to a blog post', function (done) {
+    var blogpost = fakeBlogpost();
+    chai.request(server)
+      .post('/api/blogposts/insert-blogpost')
+      .send(blogpost)
+      .end(function (err, res) {
+        res.should.have.status(200);
+        res.should.be.json;
+        res.body.should.be.a('object');
+        done();
+      });
+
+  })
 });
