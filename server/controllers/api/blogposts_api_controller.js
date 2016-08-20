@@ -3,8 +3,30 @@ const Tag = require('../../models/tag_model').TagModel;
 
 const BlogpostAPI = {};
 
+
+function addTag(tag) {
+  return new Promise(function (resolve, reject) {
+    console.log('tag', tag);
+    Tag.findOne({'name': tag.name}, function (err, foundTag) {
+      if(err) {
+        reject(Error(err));
+      }
+      if (!foundTag) {
+        foundTag = new Tag({
+          'name': tag.name
+        });
+        foundTag.save();
+      }
+      resolve({
+        '_id': foundTag._id,
+        'name': foundTag.name
+      });
+    });
+  });
+}
+
 BlogpostAPI.getAllBlogposts = function (req, res, next) {
-  Blogpost.find(function(err, blogposts) {
+  Blogpost.find(function (err, blogposts) {
     if (err) {
       return next(err);
     }
@@ -13,13 +35,23 @@ BlogpostAPI.getAllBlogposts = function (req, res, next) {
 };
 
 BlogpostAPI.insertBlogpost = function (req, res, next) {
+  var tags = [];
+  if (req.body.tags) {
+    req.body.tags.forEach(function (tag) {
+      var promise = addTag(tag);
+      promise.then(function(tag) {
+        console.log(tag);
+        tags.push(tag);
+      });
+    });
+  }
   const blogpost = new Blogpost({
     'title': req.body.title,
     'subtitle': req.body.subtitle,
     'createdOn': req.body.createdOn,
     'author': req.body.author,
     'imageURL': req.body.imageURL,
-    'tags': req.body.tags,
+    'tags': tags,
     'postBody': req.body.postBody
   });
   blogpost.save(function (err) {
@@ -34,38 +66,6 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
       'success': true,
       'blogpost': blogpost
     });
-  });
-};
-
-BlogpostAPI.addTag = function(req, res, next) {
-  console.log('PATH:');
-  Tag.findOne({'tag': req.body.name}, function (err, tag) {
-    if(err) {
-      var tag = new Tag({
-        'name': req.body.name
-      });
-      tag.save(function (err) {
-        if(err) {
-          return next(err);
-        }
-      });
-    }
-    Blogpost.findById(req.params.blogpostId, function (err, blogpost) {
-    if (err) {
-      res.send({
-        'success': false,
-        'blogpost': blogpost,
-        'tag': tag
-      });
-      return next(err);
-    }
-    console.log('tag:', tag);
-    blogpost.tags.push(tag);
-    res.send({
-      'success': true,
-      'blogpost': blogpost
-    });
-    })
   });
 };
 

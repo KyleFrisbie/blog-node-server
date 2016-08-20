@@ -15,7 +15,7 @@ function fakeBlogpost() {
       'subtitle': faker.lorem.sentence(),
       'author': faker.fake("{{name.firstName}} {{name.lastName}}"),
       'imageURL': faker.image.imageUrl(),
-      'tags': [{'tag': faker.lorem.word}, {'tag': faker.lorem.word}, {'tag': faker.lorem.word}],
+      'tags': [{'name': faker.lorem.word()}, {'name': faker.lorem.word()}, {'name': faker.lorem.word()}],
       'createdOn': Date(faker.date.past()),
       'postBody': faker.lorem.paragraphs()
     }));
@@ -77,19 +77,7 @@ describe('BlogPost-Test', function () {
         var tag = new Tag({
           'name': faker.lorem.word()
         });
-        console.log('PATH: /api/blogposts/' + blogpost._id + '/add-tag');
-        chai.request(server)
-          .post('/api/blogposts/' + blogpost._id + '/addTag')
-          .send(tag)
-          .end(function (err, res) {
-            res.should.have.status(200);
-            res.should.be.json;
-            res.body.should.be.a('object');
-            res.body.should.have.property('success');
-            res.body.should.have.property('blogpost');
-            res.body.success.should.equal(true);
-            done();
-          });
+        done();
       });
   });
 
@@ -105,5 +93,5 @@ describe('BlogPost-Test', function () {
         done();
       });
 
-  })
+  });
 });
