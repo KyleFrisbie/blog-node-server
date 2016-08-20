@@ -4,24 +4,25 @@ const Tag = require('../../models/tag_model').TagModel;
 const BlogpostAPI = {};
 
 
-function addTag(tag) {
+function addTag(tagList) {
   return new Promise(function (resolve, reject) {
+    var tags = [];
     console.log('tag', tag);
-    Tag.findOne({'name': tag.name}, function (err, foundTag) {
-      if(err) {
-        reject(Error(err));
-      }
-      if (!foundTag) {
-        foundTag = new Tag({
-          'name': tag.name
-        });
-        foundTag.save();
-      }
-      resolve({
-        '_id': foundTag._id,
-        'name': foundTag.name
+    tagList.forEach(function (tag) {
+      Tag.findOne({'name': tag.name}, function (err, foundTag) {
+        if (err) {
+          reject(Error(err));
+        }
+        if (!foundTag) {
+          foundTag = new Tag({
+            'name': tag.name
+          });
+          foundTag.save();
+        }
+        tags.push(foundTag);
       });
     });
+    resolve(tags);
   });
 }
 
@@ -35,14 +36,11 @@ BlogpostAPI.getAllBlogposts = function (req, res, next) {
 };
 
 BlogpostAPI.insertBlogpost = function (req, res, next) {
-  var tags = [];
-  if (req.body.tags) {
-    req.body.tags.forEach(function (tag) {
-      var promise = addTag(tag);
-      promise.then(function(tag) {
-        console.log(tag);
-        tags.push(tag);
-      });
+  var tagList = req.body.tags;
+  if (tagList) {
+    var promise = addTag(req.body.tags);
+    promise.then(function (tags) {
+      tagList = tags;
     });
   }
   const blogpost = new Blogpost({
@@ -51,7 +49,7 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
     'createdOn': req.body.createdOn,
     'author': req.body.author,
     'imageURL': req.body.imageURL,
-    'tags': tags,
+    'tags': tagList,
     'postBody': req.body.postBody
   });
   blogpost.save(function (err) {
@@ -67,6 +65,7 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
       'blogpost': blogpost
     });
   });
-};
+}
+;
 
 module.exports = BlogpostAPI;
