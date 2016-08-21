@@ -7,7 +7,6 @@ const BlogpostAPI = {};
 function addTag(tagList) {
   return new Promise(function (resolve, reject) {
     var tags = [];
-    console.log('tag', tag);
     tagList.forEach(function (tag) {
       Tag.findOne({'name': tag.name}, function (err, foundTag) {
         if (err) {
@@ -54,18 +53,55 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
   });
   blogpost.save(function (err) {
     if (err) {
-      res.send({
+      res.json({
         'success': false,
         'blogpost': blogpost
       });
       return next(err);
     }
-    res.send({
+    res.json({
       'success': true,
       'blogpost': blogpost
     });
   });
-}
-;
+};
+
+BlogpostAPI.updateBlogpost = function (req, res, next) {
+  var success = true;
+  var promise = new Promise(function (resolve, reject) {
+    Blogpost.findByIdAndUpdate(req.body._id, req.body, function (err, blogpost) {
+      if (err) {
+        success = false;
+      }
+      resolve(blogpost);
+    });
+  });
+
+  promise.then(function (blogpost) {
+    res.json({
+      'success': success,
+      'blogpost': blogpost
+    });
+  });
+};
+
+BlogpostAPI.removeBlogpost = function (req, res, next) {
+  var success = true;
+  var promise = new Promise(function (resolve, reject) {
+    Blogpost.findByIdAndRemove(req.body._id, req.body, function (err, blogpost) {
+      if (err) {
+        success = false;
+      }
+      resolve(blogpost);
+    });
+  });
+
+  promise.then(function (blogpost) {
+    res.json({
+      'success': success,
+      'blogpost': blogpost
+    });
+  });
+};
 
 module.exports = BlogpostAPI;
