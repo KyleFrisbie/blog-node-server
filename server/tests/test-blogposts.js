@@ -3,7 +3,6 @@ const chaiHttp = require('chai-http');
 const faker = require('faker');
 const server = require('../index');
 const Blogpost = require('../models/blogpost_model');
-const Tag = require('../models/tag_model').TagModel;
 
 var should = chai.should();
 chai.use(chaiHttp);

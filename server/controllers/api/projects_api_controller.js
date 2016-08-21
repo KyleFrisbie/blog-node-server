@@ -1,18 +1,18 @@
-const Blogpost = require('../../models/blogpost_model');
+const Project = require('../../models/project_model');
 const addTags = require('./addTags_function');
 
-const BlogpostAPI = {};
+const ProjectAPI = {};
 
-BlogpostAPI.getAllBlogposts = function (req, res, next) {
-  Blogpost.find(function (err, blogposts) {
+ProjectAPI.getAllProjects = function (req, res, next) {
+  Project.find(function (err, projects) {
     if (err) {
       return next(err);
     }
-    return res.json({'blogposts': blogposts});
+    return res.json({'projects': projects});
   });
 };
 
-BlogpostAPI.insertBlogpost = function (req, res, next) {
+ProjectAPI.insertProject = function (req, res, next) {
   var tagList = req.body.tags;
   if (tagList) {
     var promise = addTags(req.body.tags);
@@ -20,7 +20,7 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
       tagList = tags;
     });
   }
-  const blogpost = new Blogpost({
+  const project = new Project({
     'title': req.body.title,
     'subtitle': req.body.subtitle,
     'createdOn': req.body.createdOn,
@@ -29,57 +29,57 @@ BlogpostAPI.insertBlogpost = function (req, res, next) {
     'tags': tagList,
     'postBody': req.body.postBody
   });
-  blogpost.save(function (err) {
+  project.save(function (err) {
     if (err) {
       res.json({
         'success': false,
-        'blogpost': blogpost
+        'project': project
       });
       return next(err);
     }
     res.json({
       'success': true,
-      'blogpost': blogpost
+      'project': project
     });
   });
 };
 
-BlogpostAPI.updateBlogpost = function (req, res, next) {
+ProjectAPI.updateProject = function (req, res, next) {
   var success = true;
   var promise = new Promise(function (resolve, reject) {
-    Blogpost.findByIdAndUpdate(req.body._id, req.body, function (err, blogpost) {
+    Project.findByIdAndUpdate(req.body._id, req.body, function (err, project) {
       if (err) {
         success = false;
       }
-      resolve(blogpost);
+      resolve(project);
     });
   });
 
-  promise.then(function (blogpost) {
+  promise.then(function (project) {
     res.json({
       'success': success,
-      'blogpost': blogpost
+      'project': project
     });
   });
 };
 
-BlogpostAPI.removeBlogpost = function (req, res, next) {
+ProjectAPI.removeProject = function (req, res, next) {
   var success = true;
   var promise = new Promise(function (resolve, reject) {
-    Blogpost.findByIdAndRemove(req.body._id, req.body, function (err, blogpost) {
+    Project.findByIdAndRemove(req.body._id, req.body, function (err, project) {
       if (err) {
         success = false;
       }
-      resolve(blogpost);
+      resolve(project);
     });
   });
 
-  promise.then(function (blogpost) {
+  promise.then(function (project) {
     res.json({
       'success': success,
-      'blogpost': blogpost
+      'project': project
     });
   });
 };
 
-module.exports = BlogpostAPI;
+module.exports = ProjectAPI;
