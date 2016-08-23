@@ -19,7 +19,7 @@ app.use(bodyparser.json({'type': '*/*'}));
 router(app);
 
 // server setup
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 
 server.listen(port);
