@@ -1,8 +1,8 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const faker = require('faker');
-const server = require('../server/index');
-const Project = require('../server/models/project_model');
+const server = require('../src/index');
+const Project = require('../src/models/project_model');
 
 var should = chai.should();
 chai.use(chaiHttp);
