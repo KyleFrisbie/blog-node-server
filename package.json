@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon ./server/index.js",
     "test": "NODE_ENV=test mocha",
-    "win-test": "SET NODE_ENV=test mocha"
+    "win-test": "set NODE_ENV=test&&mocha"
   },
   "repository": {
     "type": "git",
